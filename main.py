@@ -1,13 +1,8 @@
 import collections
 import datetime
-from http.server import HTTPServer, SimpleHTTPRequestHandler
 import argparse  
-import pandas
+import pandas as pd
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-
-parser = argparse.ArgumentParser(description='Process some integers.')
-parser.add_argument('--data-file', default='wine3.xlsx', help='Путь к файлу с данными')
-args = parser.parse_args()
 
 def calculate_company_age():
     delta_new = company_year % 100
@@ -21,10 +16,10 @@ def calculate_company_age():
     return "лет"
 
 
-if __name__ == '__main__':
+def main(args):
     foundation_year = 1920
     now_year = datetime.datetime.now().year
-    company_year = now_year-foundation_year
+    company_year = now_year - foundation_year
     
     env = Environment(
         loader=FileSystemLoader('.'),
@@ -40,13 +35,21 @@ if __name__ == '__main__':
 
     rendered_page = template.render(
         age=company_year,
-        years=years(),
-        wines=sorted_wines
-        
+        years=calculate_company_age(company_year),
+        wines=sorted_wines  
     )
 
     with open('index.html', 'w', encoding="utf8") as file:
         file.write(rendered_page)
 
-    server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
-    server.serve_forever()
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Генерация веб-страницы на основе данных о виноделии.')
+
+    parser.add_argument(
+        '--data-file',
+        default='wine3.xlsx',
+        help='Путь к файлу с данными (по умолчанию: wine3.xlsx)'
+    )
+
+    args = parser.parse_args()
+    main(args)
