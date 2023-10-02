@@ -17,6 +17,17 @@ def calculate_company_age():
 
 
 def main(args):
+    
+    parser = argparse.ArgumentParser(description='Генерация веб-страницы на основе данных о виноделии.')
+
+    parser.add_argument(
+      '--data-file',
+      default='wine3.xlsx',
+      help='Путь к файлу с данными (по умолчанию: wine3.xlsx)'
+    )
+
+    args = parser.parse_args()
+
     foundation_year = 1920
     now_year = datetime.datetime.now().year
     company_year = now_year - foundation_year
@@ -42,14 +53,6 @@ def main(args):
     with open('index.html', 'w', encoding="utf8") as file:
         file.write(rendered_page)
 
+
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Генерация веб-страницы на основе данных о виноделии.')
-
-    parser.add_argument(
-        '--data-file',
-        default='wine3.xlsx',
-        help='Путь к файлу с данными (по умолчанию: wine3.xlsx)'
-    )
-
-    args = parser.parse_args()
-    main(args)
+  main()
