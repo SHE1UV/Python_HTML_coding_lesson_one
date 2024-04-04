@@ -23,7 +23,7 @@ def main(args):
     parser.add_argument(
       '--data-file',
       default='wine3.xlsx',
-      help='Путь к файлу с данными (по умолчанию: wine3.xlsx)'
+      help='Путь к файлу с данными (по умолчанию: wine.xlsx)'
     )
 
     args = parser.parse_args()
@@ -37,7 +37,7 @@ def main(args):
         autoescape=select_autoescape(['html', 'xml'])
     )
     template = env.get_template('template.html')
-    excel_data_df = pandas.read_excel(args.data_file, na_values=' ', keep_default_na=False)  # Используйте аргумент командной строки
+    excel_data_df = pandas.read_excel(args.data_file, na_values=' ', keep_default_na=False)  
     wines = excel_data_df.to_dict(orient='records')
     sorted_wines = collections.defaultdict(list) 
     
